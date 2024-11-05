@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "phoneApp",
-    "slug": "phoneApp",
+    "name": "open2FA",
+    "slug": "open2FA",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "myapp",
+    "scheme": "open2FA",
     "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
