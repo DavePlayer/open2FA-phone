@@ -39,9 +39,7 @@ export default function HomeScreen() {
   return (
     <SafeAreaView className="flex-1 justify-start items-center bg-bg">
       {examplePlatforms.map((platform) => (
-        <>
-          <Fabox key={platform.hash} {...platform} />
-        </>
+        <Fabox key={`${platform.hash}`} {...platform} />
       ))}
     </SafeAreaView>
   );
