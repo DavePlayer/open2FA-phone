@@ -19,10 +19,12 @@
     "@iarna/toml": "^2.2.5",
     "@react-navigation/native": "^6.0.2",
     "@reduxjs/toolkit": "^2.3.0",
+    "buffer": "^6.0.3",
     "crypto-es": "^2.1.0",
     "events": "^3.3.0",
     "expo": "~51.0.28",
     "expo-constants": "~16.0.2",
+    "expo-crypto": "~13.0.2",
     "expo-document-picker": "~12.0.2",
     "expo-font": "~12.0.9",
     "expo-linking": "~6.3.1",
@@ -50,8 +52,7 @@
     "tailwindcss": "^3.4.14",
     "toml": "^3.0.0",
     "uninstall": "^0.0.0",
-    "zod": "^3.23.8",
-    "expo-crypto": "~13.0.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

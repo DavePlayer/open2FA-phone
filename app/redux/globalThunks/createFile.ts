@@ -5,6 +5,8 @@ import { FileObject, FileSchema } from "@/app/types/fileObject";
 import { Platform } from "react-native";
 import { shareAsync } from "expo-sharing";
 import * as Crypto from "expo-crypto";
+import CryptoES from "crypto-es";
+import { Buffer } from "buffer";
 
 // Helper to derive a key with PBKDF2
 async function deriveKey(password: string, salt: Uint8Array): Promise<string> {
@@ -19,6 +21,8 @@ const encodeBase64 = (bytes: Uint8Array): string => {
   return btoa(String.fromCharCode(...bytes));
 };
 
+CryptoES.pad.NoPadding = { pad: function () {}, unpad: function () {} };
+
 // Encrypt function using HMAC (or another encryption function, as AES is unsupported directly in expo-crypto)
 async function encrypt(
   password: string,
@@ -26,30 +30,27 @@ async function encrypt(
 ): Promise<string> {
   console.log("Start encrypt function");
 
-  // Generate a random salt
-  const salt = await Crypto.getRandomBytesAsync(16);
-  console.log("Generated salt:", salt);
+  // Using a static key and iv for testing purposes
+  const key = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
+  const iv = CryptoES.enc.Hex.parse("00000000000000000000000000000000");
+  const salt = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
 
-  // Derive a key using the password and salt
-  const key = await deriveKey(password, salt);
-  console.log("Derived key:", key);
+  console.log("Key:", key);
+  console.log("IV:", iv);
+  console.log("Salt:", salt);
 
-  console.log("Encrypting message");
+  // Encrypt the text using AES
+  const encrypted = CryptoES.AES.encrypt(textToEncrypt, key, {
+    iv: iv,
+    padding: CryptoES.pad.Pkcs7, // Use Pkcs7 padding
+  });
 
-  // Encrypt the text by hashing it with the derived key
-  const encrypted = await Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA256,
-    textToEncrypt + key
-  );
-  console.log("Encrypted message:", encrypted);
+  const encryptedText = encrypted.toString() || ""; // Ensure ciphertext is in Base64
+  console.log("Encrypted message:", encryptedText);
 
-  // Convert salt to base64 manually (using a TextEncoder)
-  const saltBase64 = encodeBase64(salt);
-
-  // Combine salt (Base64) and ciphertext
-  const encryptedTextWithSalt = saltBase64 + encrypted.base64;
-
-  return encryptedTextWithSalt;
+  // Return salt (Base64) + encrypted text
+  const saltStr = salt.toString(CryptoES.enc.Base64);
+  return saltStr + "$" + encryptedText;
 }
 
 const initialFile: FileObject = {
