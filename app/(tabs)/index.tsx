@@ -8,37 +8,14 @@ import { Text, View } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Fabox from "../components/modules/Fabox";
-
-interface Platform {
-  name: string;
-  icon: {
-    name: string;
-    color?: string;
-  };
-  hash: string;
-}
-
-const examplePlatforms: Platform[] = [
-  {
-    name: "google",
-    icon: {
-      name: "logo-google",
-    },
-    hash: "213",
-  },
-  {
-    name: "google 2",
-    icon: {
-      name: "logo-google",
-    },
-    hash: "2",
-  },
-];
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 export default function HomeScreen() {
+  const platforms = useSelector((root: RootState) => root.platforms);
   return (
     <SafeAreaView className="flex-1 justify-start items-center bg-bg">
-      {examplePlatforms.map((platform) => (
+      {platforms.map((platform) => (
         <Fabox key={`${platform.hash}`} {...platform} />
       ))}
     </SafeAreaView>

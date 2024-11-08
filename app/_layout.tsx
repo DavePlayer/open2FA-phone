@@ -9,9 +9,13 @@ import { Text, View, StyleSheet } from "react-native";
 import { Link, Slot } from "expo-router";
 import "./../assets/styles.css";
 
+import { RootSiblingParent } from "react-native-root-siblings";
+
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -32,8 +36,14 @@ export default function RootLayout() {
   if (!fontsLodaded) return null;
 
   return (
-    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-      <Slot />
-    </ThemeProvider>
+    <Provider store={store}>
+      <RootSiblingParent>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Slot />
+        </ThemeProvider>
+      </RootSiblingParent>
+    </Provider>
   );
 }
