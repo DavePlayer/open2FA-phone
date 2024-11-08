@@ -19,9 +19,7 @@ export const fileLoadFullfilled = (
   return action.payload.platforms;
 };
 
-export const fileLoadRejected = (
-  state: PlatformServices[],
-  action: PayloadAction<any>
-) => {
-  console.error(action.payload);
+export const fileLoadRejected = (state: PlatformServices[], action: any) => {
+  console.error(action.error.message);
+  return state;
 };

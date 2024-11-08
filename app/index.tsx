@@ -35,7 +35,7 @@ const index = () => {
         const uri = asset.uri;
 
         // DO NOT FORGET ABOUT DECRYPTION OF THE FILE
-        await dispatch(loadFile({ uri, password: "" }))
+        await dispatch(loadFile({ uri, password: "magnus d1d noth1ng wr0ng" }))
           .then(() => {
             router.replace("/(tabs)/");
           })
