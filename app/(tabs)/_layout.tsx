@@ -34,7 +34,7 @@ export default function TabLayout() {
             title: "QrScan",
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
-                name={focused ? "qr-code" : "code-slash-outline"}
+                name={focused ? "qr-code" : "qr-code-outline"}
                 color={color}
               />
             ),

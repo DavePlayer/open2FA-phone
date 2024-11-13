@@ -22,33 +22,63 @@ async function decrypt(
   encryptedFileText: string
 ): Promise<string> {
   try {
-    console.log("Starting decryption function");
+    console.log(`Starting decryption function, password: ${password}`);
 
     // Extract the salt (Base64) and the actual encrypted hash
-    const [iv, encryptedText] = encryptedFileText.split("$");
+    const [iterationsStr, saltStr, ivStr, hmacStr, encryptedText] =
+      encryptedFileText.split("$");
 
-    // Convert the Base64 salt back to a Uint8Array using Buffer
-    // const salt: Uint8Array = new Uint8Array(Buffer.from(saltBase64, "base64"));
+    console.log(encryptedFileText.split("$"));
 
-    // console.log("Extracted salt:", salt);
-    console.log("Extracted iv:", iv);
+    // var key = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
+    // var ivWord = CryptoES.enc.Hex.parse("00000000000000000000000000000000");
+    // var salt = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
 
-    // const key = await deriveKey(password, salt); // Use the same key derivation
+    // Convert Base64 strings back to WordArray format
+    const salt = CryptoES.enc.Base64.parse(saltStr);
+    const iv = CryptoES.enc.Base64.parse(ivStr);
+    const hmac = CryptoES.enc.Base64.parse(hmacStr);
+    const iterations = parseInt(iterationsStr);
 
-    // const ivWord = CryptoES.enc.Base64.parse(iv);
-    // const ivobj = JSON.parse(iv);
-    // let ivWord = CryptoES.lib.WordArray.create();
-    // ivWord.sigBytes = ivobj.sigBytes;
-    // ivWord.words = ivobj.words;
+    // Compute expected HMAC
+    const hmacKey = CryptoES.PBKDF2(password, salt, {
+      keySize: 256 / 32,
+      iterations: iterations,
+    });
 
-    var key = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
-    var ivWord = CryptoES.enc.Hex.parse("00000000000000000000000000000000");
-    var salt = CryptoES.enc.Hex.parse("253D3FB468A0E24677C28A624BE0F939");
+    const expectedHmac = CryptoES.HmacSHA256(encryptedText, hmacKey);
 
-    console.log("Extracted iv word:", ivWord);
-    const decryptedObj = CryptoES.AES.decrypt(encryptedText.toString(), key, {
-      salt,
-      iv: ivWord,
+    const key = CryptoES.PBKDF2(password, salt, {
+      keySize: 256 / 32, // 256-bit key
+      iterations: iterations,
+    });
+
+    console.log(
+      "------------------------------------------------------------------------"
+    );
+    console.log("Extracted salt:", salt.toString(CryptoES.enc.Hex));
+    console.log("Extracted IV:", iv.toString(CryptoES.enc.Hex));
+    console.log("Extracted hmac:", hmac.toString(CryptoES.enc.Hex));
+    console.log("Expected  hmac:", expectedHmac.toString(CryptoES.enc.Hex));
+    console.log("Extracted iterations:", iterations);
+    console.log("password`: ", password);
+    console.log("Derived Key (from PBKDF2):", key.toString(CryptoES.enc.Hex));
+    console.log(
+      "------------------------------------------------------------------------"
+    );
+
+    if (!iterations) {
+      throw new Error("File is not ok");
+    }
+
+    if (expectedHmac.toString(CryptoES.enc.Base64) !== hmacStr) {
+      throw new Error(
+        "Decryption failed: HMAC verification failed. Invalid password."
+      );
+    }
+
+    const decryptedObj = CryptoES.AES.decrypt(encryptedText, key, {
+      iv: iv,
       padding: CryptoES.pad.Pkcs7,
     });
 
@@ -60,7 +90,7 @@ async function decrypt(
       console.log("Decrypted message:", decryptedText); // Check if the decrypted message is valid
       return decryptedText;
     } else {
-      throw new Error("Decryption failed: Invalid decrypted object");
+      throw new Error("Decryption failed: Invalid password");
     }
   } catch (error) {
     console.error("Error during decryption:", error);
@@ -79,9 +109,6 @@ export const loadFile = createAsyncThunk(
 
       console.log("File text:\n", fileText); // works, YAY
 
-      //----------------------------------------
-      // TODO -> Decryption of the file
-      //----------------------------------------
       const decryptedFileText = await decrypt(password, fileText);
       console.log(`decrypted file: ${decryptedFileText}`);
       const data = toml.parse(decryptedFileText);
