@@ -5,3 +5,7 @@
 .text {
         @apply text-white
 }
+
+Text {
+        @apply text-text
+}

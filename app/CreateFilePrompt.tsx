@@ -7,6 +7,10 @@ import Toast from "react-native-root-toast";
 import { useAppDispatch } from "./redux/store";
 import { createFile } from "./redux/globalThunks/createFile";
 import { useRouter } from "expo-router";
+import {
+  hideWrapper,
+  showWrapper,
+} from "./redux/slices/wrapperSlice/wrapperSlice";
 
 export default function CreateFilePrompt() {
   const [iterations, setIterations] = useState(10000);
@@ -17,10 +21,12 @@ export default function CreateFilePrompt() {
   const handleCraeteFile = async () => {
     if (password.length > 0) {
       try {
+        dispatch(showWrapper());
         // Use `unwrap` to get the actual result or catch an error
         await dispatch(createFile({ password, iterations }));
         // If successful, then navigate
-        router.replace("/(tabs)/");
+        dispatch(hideWrapper());
+        router.navigate("/");
       } catch (err) {
         Toast.show("Something went wrong durin creation of the file");
         console.error("Error in file creating:", err);
@@ -71,6 +77,11 @@ export default function CreateFilePrompt() {
           className="mt-10"
           title="Create file"
           handlePress={() => handleCraeteFile()}
+        />
+        <Button
+          className="mt-10"
+          title="Go back"
+          handlePress={() => router.navigate("/")}
         />
       </View>
     </SafeAreaView>

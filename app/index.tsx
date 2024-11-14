@@ -33,7 +33,7 @@ const index = () => {
         const [asset] = document.assets;
         const uri = asset.uri;
 
-        if (uri.length > 0) router.replace(`/LoadFilePrompt?uri=${uri}`);
+        if (uri.length > 0) router.navigate(`/LoadFilePrompt?uri=${uri}`);
         else Toast.show("no file was selected");
       } else {
         console.log(document.assets, document.canceled);
@@ -55,7 +55,7 @@ const index = () => {
       if (status == "granted") {
         console.log("file access granted");
 
-        router.push("/CreateFilePrompt");
+        router.navigate("/CreateFilePrompt");
       }
     } catch (error: unknown) {
       const err = error as Error;
