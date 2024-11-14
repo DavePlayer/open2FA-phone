@@ -2,17 +2,9 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import Timer from "./timer";
+import { PlatformServices } from "@/app/types/services";
 
-interface Platform {
-  name: string;
-  icon: {
-    name: string;
-    color?: string;
-  };
-  hash: string;
-}
-
-const Fabox = ({ name }: Platform) => {
+const Fabox = ({ issuer }: PlatformServices) => {
   const [timer, setTimer] = useState(60);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
   const [hashCode, setHashCode] = useState("534 711");
@@ -41,7 +33,7 @@ const Fabox = ({ name }: Platform) => {
       <TabBarIcon className="" name="logo-google" color="#fff" />
       <View className="grow px-4 flex relative justify-center">
         <Text className="text-text text-sm absolute mb-5 left-4 top-[-25]">
-          {name}
+          {issuer}
         </Text>
         <Text className="text-text text-5xl">{hashCode}</Text>
       </View>

@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   fileLoadFullfilled,
   fileLoadPending,
@@ -7,20 +7,33 @@ import {
 import { PlatformServices } from "@/app/types/services";
 import { loadFile } from "../../globalThunks/loadFile";
 
+// example code:
+// otpauth://totp/OmegaLoveIssac:1?secret=AYPWCSJSIFLVYMD7&period=30&digits=6&algorithm=SHA1&issuer=OmegaLoveIssac
+
 const initialState: PlatformServices[] = [
   {
-    name: "google",
+    issuer: "google",
     icon: {
       name: "logo-google",
     },
-    hash: "213",
+    secret: "213",
+    algorithm: "sha1",
+    digits: 6,
+    period: 30,
+    otpType: "tmp",
+    label: "tmp",
   },
   {
-    name: "google 2",
+    issuer: "google 2",
     icon: {
       name: "logo-google",
     },
-    hash: "2",
+    secret: "123",
+    algorithm: "sha1",
+    digits: 6,
+    period: 30,
+    otpType: "tmp",
+    label: "tmp",
   },
 ];
 
@@ -28,9 +41,9 @@ const platformsSlice = createSlice({
   name: "platforms",
   initialState,
   reducers: {
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //     state.value += action.payload;
-    // },
+    addService: (state, action: PayloadAction<PlatformServices>) => {
+      return [...state, action.payload];
+    },
   },
   extraReducers: (builder) => {
     // ---------------------
@@ -44,5 +57,5 @@ const platformsSlice = createSlice({
   },
 });
 
-// export const { logout } = userSlice.actions;
+export const { addService } = platformsSlice.actions;
 export default platformsSlice.reducer;
