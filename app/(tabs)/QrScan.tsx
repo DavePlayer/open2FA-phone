@@ -13,12 +13,14 @@ import { PlatformServicesSchema } from "../types/services";
 import Toast from "react-native-root-toast";
 import { useAppDispatch } from "../redux/store";
 import { addService } from "../redux/slices/platformsSlice/platformsSlice";
+import { useRouter } from "expo-router";
 
 export default function TabTwoScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
   const [cameraOn, setCameraState] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [scanLocked, setScanLock] = useState(false);
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
@@ -61,6 +63,19 @@ export default function TabTwoScreen() {
 
       // TODO window for accepting scanned service
       await dispatch(addService(serviceObj));
+      setCameraState(false);
+      // router.navigate({
+      //   pathname: "/(tabs)/SubPage/CorrectQrScan",
+      //   params: {
+      //     otpType: otpType ?? "",
+      //     label: label ?? "",
+      //     secret: dataObj.secret ?? "",
+      //     period: dataObj.period ? parseInt(dataObj.period, 10) : 30,
+      //     digits: dataObj.digits ? parseInt(dataObj.digits, 10) : 6,
+      //     algorithm: dataObj.algorithm ?? "SHA1",
+      //     issuer: dataObj.issuer ?? undefined,
+      //   },
+      // });
     } catch (error) {
       const err = error as Error;
       console.error(err);

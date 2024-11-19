@@ -23,17 +23,19 @@ export default function LoadFilePrompt() {
     console.log("handling file decryption with: ", uri, password);
     if (password.length > 0) {
       try {
-        dispatch(showWrapper());
+        await dispatch(showWrapper());
         await dispatch(loadFile({ uri, password })).unwrap();
-        dispatch(hideWrapper());
+        await dispatch(hideWrapper());
 
         // Navigation should only occur if decryption is successful
-        router.navigate("/(tabs)/");
+        router.navigate("/(tabs)");
       } catch (error) {
         const err = error as Error;
         // Display an error message if decryption fails
         Toast.show("invalid password");
         console.error("Error in file loading:", err.message);
+      } finally {
+        await dispatch(hideWrapper());
       }
     } else {
       Toast.show("Password can't be empty", {});

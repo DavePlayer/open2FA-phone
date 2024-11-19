@@ -15,6 +15,11 @@ export default function HomeScreen() {
   const platforms = useSelector((root: RootState) => root.platforms);
   return (
     <SafeAreaView className="flex-1 justify-start items-center bg-bg">
+      {platforms.length === 0 && (
+        <Text className="text-text text-3xl mt-10">
+          No platforms registered
+        </Text>
+      )}
       {platforms.map((platform) => (
         <Fabox key={`${platform.secret}`} {...platform} />
       ))}
