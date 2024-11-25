@@ -7,7 +7,8 @@ const config = getDefaultConfig(__dirname);
 
 config.resolver.extraNodeModules = {
   stream: require.resolve('stream-browserify'),
-   events: require.resolve('events'),
+  events: require.resolve('events'),
+  crypto: require.resolve('react-native-crypto'),
 };
 
 module.exports = withNativeWind(config, { input: "./assets/styles.css" });

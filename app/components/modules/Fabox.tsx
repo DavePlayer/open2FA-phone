@@ -2,21 +2,45 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import Timer from "./timer";
-import { PlatformServices } from "@/app/types/services";
+import { PlatformService } from "@/app/types/services";
+import * as OTPAuth from "otpauth";
 
-const Fabox = ({ issuer }: PlatformServices) => {
-  const [timer, setTimer] = useState(60);
+const Fabox = ({
+  issuer,
+  digits,
+  period,
+  algorithm,
+  secret,
+  label,
+}: PlatformService) => {
+  const generateNewToken = () => {
+    const totp = new OTPAuth.TOTP({
+      issuer,
+      label,
+      algorithm,
+      digits,
+      period,
+      secret,
+    });
+    const token = totp.generate();
+
+    return token;
+  };
+
+  const [timer, setTimer] = useState(period);
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
-  const [hashCode, setHashCode] = useState("534 711");
+  const [token, setToken] = useState(generateNewToken());
 
   useEffect(() => {
-    const id = setInterval(() => {
+    const id = setInterval(async () => {
       setTimer((prevTime) => {
         if (prevTime > 0) {
           return prevTime - 1;
         } else {
-          setHashCode("533 111");
-          return 60; // Reset the timer
+          const newToken = generateNewToken();
+          // console.log("new code expires at: ", expires);
+          setToken(newToken);
+          return period; // Reset the timer
         }
       });
     }, 1000);
@@ -35,7 +59,7 @@ const Fabox = ({ issuer }: PlatformServices) => {
         <Text className="text-text text-sm absolute mb-5 left-4 top-[-25]">
           {issuer}
         </Text>
-        <Text className="text-text text-5xl">{hashCode}</Text>
+        <Text className="text-text text-5xl">{token}</Text>
       </View>
       <Timer time={timer} />
     </View>
