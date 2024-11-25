@@ -1,25 +1,29 @@
 import { FileObject } from "@/app/types/fileObject";
-import { PlatformServices } from "@/app/types/services";
+import { PlatformService } from "@/app/types/services";
 import { PayloadAction } from "@reduxjs/toolkit";
+import { PlatformsSliceState } from "../platformsSlice";
 
 export const fileLoadPending = (
-  state: PlatformServices[],
+  state: PlatformsSliceState,
   action: PayloadAction<undefined>
 ) => {
   console.log("reading file");
 };
 
 export const fileLoadFullfilled = (
-  state: PlatformServices[],
+  state: PlatformsSliceState,
   action: PayloadAction<FileObject>
 ) => {
   console.log(`file loaded: ${JSON.stringify(action.payload, null, 4)}`);
 
   // temporary solution. handling loading after decryption option
-  return action.payload.platforms;
+  return {
+    ...state,
+    platformServices: action.payload.platforms,
+  };
 };
 
-export const fileLoadRejected = (state: PlatformServices[], action: any) => {
+export const fileLoadRejected = (state: PlatformsSliceState, action: any) => {
   console.error(action.error.message);
   return state;
 };

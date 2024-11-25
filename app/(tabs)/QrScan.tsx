@@ -8,11 +8,10 @@ import {
 import { useState } from "react";
 import Button from "../components/MainButton";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { z } from "zod";
-import { PlatformServicesSchema } from "../types/services";
+import { PlatformServiceSchema } from "../types/services";
 import Toast from "react-native-root-toast";
 import { useAppDispatch } from "../redux/store";
-import { addService } from "../redux/slices/platformsSlice/platformsSlice";
+import { addServiceToConfirm } from "../redux/slices/platformsSlice/platformsSlice";
 import { useRouter } from "expo-router";
 
 export default function TabTwoScreen() {
@@ -59,23 +58,25 @@ export default function TabTwoScreen() {
     };
 
     try {
-      const serviceObj = await PlatformServicesSchema.parseAsync(typedDataObj);
+      const serviceObj = await PlatformServiceSchema.parseAsync(typedDataObj);
 
       // TODO window for accepting scanned service
-      await dispatch(addService(serviceObj));
+      await dispatch(addServiceToConfirm(serviceObj));
       setCameraState(false);
-      // router.navigate({
-      //   pathname: "/(tabs)/SubPage/CorrectQrScan",
-      //   params: {
-      //     otpType: otpType ?? "",
-      //     label: label ?? "",
-      //     secret: dataObj.secret ?? "",
-      //     period: dataObj.period ? parseInt(dataObj.period, 10) : 30,
-      //     digits: dataObj.digits ? parseInt(dataObj.digits, 10) : 6,
-      //     algorithm: dataObj.algorithm ?? "SHA1",
-      //     issuer: dataObj.issuer ?? undefined,
-      //   },
-      // });
+      router.navigate({
+        pathname: "/(tabs)/SubPage/CorrectQrScan",
+        // every param must be a string. after that it must be converted back to numbers...
+        // I start considering adding tempPlatformObjToConfirm in redux slice
+        params: {
+          otpType: otpType ?? "",
+          label: label ?? "",
+          secret: dataObj.secret ?? "",
+          period: dataObj.period ? parseInt(dataObj.period, 10) : 30,
+          digits: dataObj.digits ? parseInt(dataObj.digits, 10) : 6,
+          algorithm: dataObj.algorithm ?? "SHA1",
+          issuer: dataObj.issuer ?? undefined,
+        },
+      });
     } catch (error) {
       const err = error as Error;
       console.error(err);

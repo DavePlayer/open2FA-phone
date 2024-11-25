@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { PlatformServicesSchema } from "./services";
+import { PlatformServiceSchema } from "./services";
 import { SettingsSchema } from "./settings";
 
 export const FileSchema = z.object({
-  platforms: z.array(PlatformServicesSchema),
+  platforms: z.array(PlatformServiceSchema),
   settings: z.optional(SettingsSchema),
 });
 

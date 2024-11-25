@@ -52,6 +52,12 @@ export default function TabLayout() {
             ),
           }}
         />
+        <Tabs.Screen
+          name="SubPage/CorrectQrScan"
+          options={{
+            href: null,
+          }}
+        />
       </Tabs>
     </>
   );
