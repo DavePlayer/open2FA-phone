@@ -13,44 +13,42 @@ const Fabox = ({
   secret,
   label,
 }: PlatformService) => {
-  const generateNewToken = () => {
-    const totp = new OTPAuth.TOTP({
-      issuer,
-      label,
-      algorithm,
-      digits,
-      period,
-      secret,
-    });
-    const token = totp.generate();
+  const totp = new OTPAuth.TOTP({
+    issuer,
+    label,
+    algorithm,
+    digits,
+    period,
+    secret,
+  });
 
-    return token;
+  const generateNewToken = () => {
+    return totp.generate();
   };
 
-  const [timer, setTimer] = useState(period);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
+  const [timeLeft, setTimeLeft] = useState(
+    period - (Math.floor(Date.now() / 1000) % period)
+  );
   const [token, setToken] = useState(generateNewToken());
 
   useEffect(() => {
-    const id = setInterval(async () => {
-      setTimer((prevTime) => {
-        if (prevTime > 0) {
-          return prevTime - 1;
-        } else {
-          const newToken = generateNewToken();
-          // console.log("new code expires at: ", expires);
-          setToken(newToken);
-          return period; // Reset the timer
-        }
-      });
+    const id = setInterval(() => {
+      // Calculate the time left until the next TOTP period
+      const currentTime = Math.floor(Date.now() / 1000);
+      const remainingTime = period - (currentTime % period);
+
+      setTimeLeft(remainingTime);
+
+      // When remainingTime is equal to the period, generate a new token
+      if (remainingTime === period) {
+        const newToken = generateNewToken();
+        setToken(newToken);
+      }
     }, 1000);
 
-    setIntervalId(id);
-
-    return () => {
-      if (intervalId) clearInterval(intervalId);
-    };
-  }, []);
+    // Cleanup interval on component unmount
+    return () => clearInterval(id);
+  }, [period, totp]);
 
   return (
     <View className="w-full p-5 flex flex-row items-center mt-5">
@@ -61,7 +59,7 @@ const Fabox = ({
         </Text>
         <Text className="text-text text-5xl">{token}</Text>
       </View>
-      <Timer time={timer} />
+      <Timer time={timeLeft} />
     </View>
   );
 };
