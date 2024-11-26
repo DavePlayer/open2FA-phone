@@ -8,6 +8,7 @@ import { addService } from "@/app/redux/slices/platformsSlice/platformsSlice";
 import { useSelector } from "react-redux";
 import Toast from "react-native-root-toast";
 import { saveToFile } from "@/app/redux/globalThunks/saveToFile";
+import { useTranslation } from "react-i18next";
 
 type StringifiedState = {
   issuer: string;
@@ -48,37 +49,39 @@ const CorrectQrScan = () => {
     router.navigate("/(tabs)/QrScan");
   };
 
+  const { t } = useTranslation();
   return (
     <View className="p-5 flex-1 flex-col">
       <Text className="text-text text-center text-3xl my-10">
-        Confirm Scaned Data
+        {t("ConfirmScanTitle")}
       </Text>
 
       <Text className="text-text text-lg my-3">
-        Issuer: {serviceToConfirm ? serviceToConfirm.issuer : "undefined"}
+        {t("issuer")}:{" "}
+        {serviceToConfirm ? serviceToConfirm.issuer : "undefined"}
       </Text>
       <Text className="text-text text-lg my-3">
-        Refresh period:{" "}
+        {t("refreshPeriod")}:{" "}
         {serviceToConfirm ? serviceToConfirm.period : "undefined"}
       </Text>
       <Text className="text-text text-lg my-3">
-        Hash algorithm:{" "}
+        {t("hashAlgorithm")}:{" "}
         {serviceToConfirm ? serviceToConfirm.algorithm : "undefined"}
       </Text>
       <Text className="text-text text-lg my-3">
-        Label: {serviceToConfirm ? serviceToConfirm.label : "undefined"}
+        {t("label")}: {serviceToConfirm ? serviceToConfirm.label : "undefined"}
       </Text>
       <Text className="text-text text-lg my-3">
-        Generated digits length:{" "}
+        {t("generatedDigitsLength")}:{" "}
         {serviceToConfirm ? serviceToConfirm.digits : "undefined"}
       </Text>
 
       <View className="flex-grow flex justify-end items-center">
         <Button handlePress={() => confirm()} className="mb-5 w-full">
-          Confirm
+          {t("confirm")}
         </Button>
         <Button handlePress={() => cancel()} className="mb-10 w-full">
-          Cancel
+          {t("cancel")}
         </Button>
       </View>
     </View>

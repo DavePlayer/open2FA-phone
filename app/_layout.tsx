@@ -17,6 +17,7 @@ import { useEffect } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import LoadingWrapper from "./components/LoadingWrapper";
+import "./utils/i18n";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();

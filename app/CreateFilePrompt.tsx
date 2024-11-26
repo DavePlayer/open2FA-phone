@@ -11,6 +11,7 @@ import {
   hideWrapper,
   showWrapper,
 } from "./redux/slices/wrapperSlice/wrapperSlice";
+import { useTranslation } from "react-i18next";
 
 export default function CreateFilePrompt() {
   const [iterations, setIterations] = useState(10000);
@@ -40,24 +41,15 @@ export default function CreateFilePrompt() {
     }
   };
 
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="bg-bg flex-1 justify-center items-center p-5">
-      <Text className="text-text mb-5">
-        Here you can create a file in which you store services hashes with which
-        app generates 6 digit codes for 2FA. It will be encrypted with your
-        password, so make sure it is secure. Iterations is a number that
-        dicdates how long it takes to crack your password. But be aware that the
-        larger the number, the longer it will take to decrypt it.
-      </Text>
-      <Text className="text-secondary mb-10">
-        After clicking create file you have to wait a few seconds. After that a
-        share prompt will appear in which you can save the file onto your disc
-        or cloud
-      </Text>
+      <Text className="text-text mb-5">{t("createFileInstruction")}</Text>
+      <Text className="text-secondary mb-10">{t("createFileWarning")}</Text>
       <View className="mt-5 flex w-full">
         <TextInput
           className="w-full text-center mb-5 border-secondary border rounded-xl text-lg p-2 text-text placeholder:text-[#aaa]"
-          placeholder="Password"
+          placeholder={t("password")}
           value={password}
           onChangeText={(val) => setPassword(val)}
         />
@@ -75,16 +67,16 @@ export default function CreateFilePrompt() {
           thumbTintColor="#9146FF"
         />
         <Text className="text-text text-center text-lg mt-2">
-          Iterations: {iterations}
+          {t("iterations")}: {iterations}
         </Text>
         <Button
           className="mt-10"
-          title="Create file"
+          title={t("createFile")}
           handlePress={() => handleCraeteFile()}
         />
         <Button
           className="mt-10"
-          title="Go back"
+          title={t("goBack")}
           handlePress={() => router.navigate("/")}
         />
       </View>

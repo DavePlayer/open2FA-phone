@@ -4,10 +4,12 @@ import React from "react";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
+import { useTranslation } from "react-i18next";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  const { t } = useTranslation();
   return (
     <>
       <Tabs
@@ -19,7 +21,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="index"
           options={{
-            title: "Home",
+            title: t("home"),
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "home" : "home-outline"}
@@ -31,7 +33,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="QrScan"
           options={{
-            title: "QrScan",
+            title: t("qrScan"),
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "qr-code" : "qr-code-outline"}
@@ -43,7 +45,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="settings"
           options={{
-            title: "Settings",
+            title: t("settings"),
             tabBarIcon: ({ color, focused }) => (
               <TabBarIcon
                 name={focused ? "settings" : "settings-outline"}

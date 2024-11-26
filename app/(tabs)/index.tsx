@@ -10,14 +10,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Fabox from "../components/modules/Fabox";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { useTranslation } from "react-i18next";
 
 export default function HomeScreen() {
   const platforms = useSelector((root: RootState) => root.platforms);
+
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="flex-1 justify-start items-center bg-bg">
       {platforms.platformServices.length === 0 && (
         <Text className="text-text text-3xl mt-10">
-          No platforms registered
+          {t("noPlatformsMessage")}
         </Text>
       )}
       {platforms.platformServices.map((platform) => (

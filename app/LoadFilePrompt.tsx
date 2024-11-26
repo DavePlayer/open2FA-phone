@@ -12,6 +12,7 @@ import {
   hideWrapper,
   showWrapper,
 } from "./redux/slices/wrapperSlice/wrapperSlice";
+import { useTranslation } from "react-i18next";
 
 export default function LoadFilePrompt() {
   const [password, setPassword] = useState("");
@@ -43,26 +44,27 @@ export default function LoadFilePrompt() {
     }
   };
 
+  const { t } = useTranslation();
   return (
     <SafeAreaView className="bg-bg flex-1 justify-center items-center p-5">
-      <Text className="text-text mb-5 text-3xl">
-        Give password to decrypt file
+      <Text className="text-text mb-5 text-3xl text-center">
+        {t("loadFileTitle")}
       </Text>
       <View className="mt-5 flex w-full">
         <TextInput
           className="w-full text-center mb-5 border-secondary border rounded-xl text-lg p-2 text-text placeholder:text-[#aaa]"
-          placeholder="Password"
+          placeholder={t("password")}
           value={password}
           onChangeText={(val) => setPassword(val)}
         />
         <Button
           className="mt-5"
-          title="Load file"
+          title={t("loadFile")}
           handlePress={() => handleLoadFile()}
         />
         <Button
           className="mt-10"
-          title="Go back"
+          title={t("goBack")}
           handlePress={() => router.navigate("/")}
         />
       </View>

@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/native";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Link, useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
 import Button from "@/app/components/MainButton";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
@@ -16,6 +16,7 @@ import Toast from "react-native-root-toast";
 import { useAppDispatch } from "./redux/store";
 import { loadFile } from "./redux/globalThunks/loadFile";
 import { createFile } from "./redux/globalThunks/createFile";
+import { useTranslation } from "react-i18next";
 
 const index = () => {
   const colorScheme = useColorScheme();
@@ -83,18 +84,19 @@ const index = () => {
     }
   };
 
+  const { t } = useTranslation();
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
       <View className="flex-1 justify-center items-center bg-bg">
-        <Text className="color-text text-2xl mb-5">Unlock open2FA</Text>
+        <Text className="color-text text-2xl mb-5">{t("unlockMessage")}</Text>
         <Button
           className="min-w-[50%]"
-          title="Load File"
+          title={t("loadFile")}
           handlePress={() => handleLoadFile()}
         />
         <Button
           className="min-w-[50%]"
-          title="Create File"
+          title={t("createFile")}
           handlePress={() => handleCreateFile()}
         />
       </View>

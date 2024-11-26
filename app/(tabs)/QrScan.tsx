@@ -13,6 +13,7 @@ import Toast from "react-native-root-toast";
 import { useAppDispatch } from "../redux/store";
 import { addServiceToConfirm } from "../redux/slices/platformsSlice/platformsSlice";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 
 export default function TabTwoScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -82,15 +83,17 @@ export default function TabTwoScreen() {
       console.error(err);
     }
   };
+
+  const { t } = useTranslation();
   return (
     <>
       {!cameraOn ? (
         <SafeAreaView className="bg-bg flex-1 items-center justify-center">
-          <Text className="text-text text-2xl mt-5 justify-self-start">
-            Scan the QR code on the website where you are enabling 2FA
+          <Text className="text-text text-2xl mt-5 justify-self-start text-center">
+            {t("qrScanTitle")}
           </Text>
           <Button
-            title="Scan QR code"
+            title={t("scanQrCode")}
             className="mt-16"
             handlePress={() => handleScan()}
           ></Button>
@@ -105,7 +108,7 @@ export default function TabTwoScreen() {
           />
           <Button
             className="absolute bottom-0 left-0 right-0"
-            title="Cancel Scaning"
+            title={t("cancelScaning")}
             handlePress={() => setCameraState(false)}
           />
         </>
