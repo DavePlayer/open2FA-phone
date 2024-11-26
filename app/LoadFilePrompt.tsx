@@ -17,15 +17,16 @@ export default function LoadFilePrompt() {
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const { uri } = useLocalSearchParams<{ uri: string }>();
+  const { uri, fileName } = useLocalSearchParams<{
+    uri: string;
+    fileName: string;
+  }>();
 
   const handleLoadFile = async () => {
     console.log("handling file decryption with: ", uri, password);
     if (password.length > 0) {
       try {
-        await dispatch(showWrapper());
-        await dispatch(loadFile({ uri, password })).unwrap();
-        await dispatch(hideWrapper());
+        await dispatch(loadFile({ uri, password, fileName })).unwrap();
 
         // Navigation should only occur if decryption is successful
         router.navigate("/(tabs)");

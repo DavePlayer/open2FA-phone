@@ -21,15 +21,12 @@ export default function CreateFilePrompt() {
   const handleCraeteFile = async () => {
     if (password.length > 0) {
       try {
-        await dispatch(showWrapper());
-
         // Async is sometimes a joke. In which case it is necessary for wrapper to be displayed
         await new Promise((resolve) => setTimeout(resolve, 50));
 
         // Use `unwrap` to get the actual result or catch an error
         await dispatch(createFile({ password, iterations }));
         // If successful, then navigate
-        await dispatch(hideWrapper());
         router.navigate("/");
       } catch (err) {
         await dispatch(hideWrapper());

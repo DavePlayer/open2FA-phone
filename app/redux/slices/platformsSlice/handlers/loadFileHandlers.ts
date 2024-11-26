@@ -16,10 +16,9 @@ export const fileLoadFullfilled = (
 ) => {
   console.log(`file loaded: ${JSON.stringify(action.payload, null, 4)}`);
 
-  // temporary solution. handling loading after decryption option
   return {
     ...state,
-    platformServices: action.payload.platforms,
+    platformServices: action.payload.platformServices,
   };
 };
 

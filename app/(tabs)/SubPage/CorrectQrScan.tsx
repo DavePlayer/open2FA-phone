@@ -7,6 +7,7 @@ import { RootState, useAppDispatch } from "@/app/redux/store";
 import { addService } from "@/app/redux/slices/platformsSlice/platformsSlice";
 import { useSelector } from "react-redux";
 import Toast from "react-native-root-toast";
+import { saveToFile } from "@/app/redux/globalThunks/saveToFile";
 
 type StringifiedState = {
   issuer: string;
@@ -32,7 +33,10 @@ const CorrectQrScan = () => {
     try {
       console.log(serviceToConfirm);
 
-      await dispatch(addService(serviceToConfirm));
+      dispatch(addService(serviceToConfirm));
+
+      await dispatch(saveToFile());
+
       router.navigate("/(tabs)");
     } catch (error) {
       const err = error as Error;

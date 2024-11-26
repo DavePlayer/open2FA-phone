@@ -3,7 +3,7 @@ import { PlatformServiceSchema } from "./services";
 import { SettingsSchema } from "./settings";
 
 export const FileSchema = z.object({
-  platforms: z.array(PlatformServiceSchema),
+  platformServices: z.array(PlatformServiceSchema),
   settings: z.optional(SettingsSchema),
 });
 

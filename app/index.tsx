@@ -26,15 +26,32 @@ const index = () => {
 
     try {
       const document = await DocumentPicker.getDocumentAsync({
-        copyToCacheDirectory: true,
+        copyToCacheDirectory: false,
         multiple: false,
       });
       if (document.assets && document.assets.length && !document.canceled) {
         const [asset] = document.assets;
         const uri = asset.uri;
 
-        if (uri.length > 0) router.navigate(`/LoadFilePrompt?uri=${uri}`);
-        else Toast.show("no file was selected");
+        // uri is broken when special characters are included
+        // no idea why that is
+        const fileName = uri.split(/,|%2F|%3A/).pop() as string;
+        console.log(`uri: ${uri}\nsplit:${uri.split(/,|%2F|%3A/)}`);
+        const newFileUri = FileSystem.documentDirectory + fileName;
+
+        const fileInfo = await FileSystem.getInfoAsync(newFileUri);
+        if (fileInfo.exists) {
+          await FileSystem.deleteAsync(newFileUri); // Delete the file if it exists
+        }
+
+        await FileSystem.copyAsync({
+          from: uri,
+          to: newFileUri,
+        });
+
+        router.navigate(
+          `/LoadFilePrompt?uri=${newFileUri}&fileName=${fileName}`
+        );
       } else {
         console.log(document.assets, document.canceled);
         throw new Error("file either canceled or sth is wrong");
