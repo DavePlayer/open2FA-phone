@@ -39,6 +39,8 @@ const resources = {
       generatedDigitsLength: "Generated Digids Length",
       confirm: "Confirm",
       cancel: "Cancel",
+      setLanguage: "Set language",
+      language: "Language",
     },
   },
   pl: {
@@ -72,6 +74,8 @@ const resources = {
       generatedDigitsLength: "Długość wygenerowanych cyfr",
       confirm: "Potwierdź",
       cancel: "Anuluj",
+      setLanguage: "Ustaw język",
+      language: "Język",
     },
   },
 };
