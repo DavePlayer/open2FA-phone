@@ -26,6 +26,8 @@ const Fabox = ({
     return totp.generate();
   };
 
+  const labelMaxLenth = 35;
+
   const [timeLeft, setTimeLeft] = useState(
     period - (Math.floor(Date.now() / 1000) % period)
   );
@@ -56,6 +58,11 @@ const Fabox = ({
       <View className="grow px-4 flex relative justify-center">
         <Text className="text-text text-sm absolute mb-5 left-4 top-[-25]">
           {issuer}
+        </Text>
+        <Text className="text-text text-sm absolute mb-5 left-4 bottom-[-30]">
+          {label.length > labelMaxLenth
+            ? label.substring(0, labelMaxLenth) + "..."
+            : label}
         </Text>
         <Text className="text-text text-5xl">{token}</Text>
       </View>

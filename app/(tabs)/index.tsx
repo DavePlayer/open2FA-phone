@@ -11,6 +11,8 @@ import Fabox from "../components/modules/Fabox";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useTranslation } from "react-i18next";
+import { Buffer } from "buffer";
+global.Buffer = Buffer;
 
 export default function HomeScreen() {
   const platforms = useSelector((root: RootState) => root.platforms);

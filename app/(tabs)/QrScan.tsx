@@ -1,93 +1,44 @@
 import { StyleSheet, Image, Platform, View, Text } from "react-native";
-import {
-  CameraView,
-  CameraType,
-  useCameraPermissions,
-  BarcodeScanningResult,
-} from "expo-camera";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import Button from "../components/MainButton";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { PlatformServiceSchema } from "../types/services";
-import Toast from "react-native-root-toast";
 import { useAppDispatch } from "../redux/store";
-import { addServiceToConfirm } from "../redux/slices/platformsSlice/platformsSlice";
-import { useRouter } from "expo-router";
 import { useTranslation } from "react-i18next";
+import { handleAddServiceBarcodeData } from "./helperFunctions/handleAddServiceBarcodeData";
+import { handleRelayServiceBarcodeData } from "./helperFunctions/handleRelayServiceBarcodeData";
 
 export default function TabTwoScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
-  const [cameraOn, setCameraState] = useState(false);
+  const [AddCameraOn, setAddCameraState] = useState(false);
+  const [relayCameraOn, setRelayCameraState] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [scanLocked, setScanLock] = useState(false);
-  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
+  // ask for permissions to turn on camera for scaning QR codes with 2FA service data
   const handleScan = async () => {
     if (!permission?.granted) await requestPermission();
 
     console.log("camera permission granted: ", permission);
 
-    setCameraState(true);
+    setAddCameraState(true);
   };
-  const handleBarcodeData = async (scanData: BarcodeScanningResult) => {
-    const { data } = scanData;
-    setScanLock(true);
-    setTimeout(() => setScanLock(false), 2000);
-    console.log(data);
 
-    const [otpauthPart, queryParams] = data.split("?");
+  // ask for permissions to turn on camera for scaning Relay QR codes
+  const handleRelayScan = async () => {
+    if (!permission?.granted) await requestPermission();
 
-    const otpauthRegex = /^otpauth:\/\/([^/]+)\/(.+)/;
-    const match = otpauthPart.match(otpauthRegex);
+    console.log("camera permission granted: ", permission);
 
-    const otpType = match ? match[1] : null; // e.g., 'totp'
-    const label = match ? match[2] : null; // e.g., 'OmegaLoveIssac:1'
-
-    const params = new URLSearchParams(queryParams);
-    const dataObj = Object.fromEntries(params.entries());
-
-    const typedDataObj = {
-      otpType: otpType ?? "",
-      label: label ?? "",
-      secret: dataObj.secret ?? "",
-      period: dataObj.period ? parseInt(dataObj.period, 10) : 30, // Default to 30 if not present
-      digits: dataObj.digits ? parseInt(dataObj.digits, 10) : 6, // Default to 6 if not present
-      algorithm: dataObj.algorithm ?? "SHA1",
-      issuer: dataObj.issuer ?? undefined,
-    };
-
-    try {
-      const serviceObj = await PlatformServiceSchema.parseAsync(typedDataObj);
-
-      // TODO window for accepting scanned service
-      await dispatch(addServiceToConfirm(serviceObj));
-      setCameraState(false);
-      router.navigate({
-        pathname: "/(tabs)/SubPage/CorrectQrScan",
-        // every param must be a string. after that it must be converted back to numbers...
-        // I start considering adding tempPlatformObjToConfirm in redux slice
-        params: {
-          otpType: otpType ?? "",
-          label: label ?? "",
-          secret: dataObj.secret ?? "",
-          period: dataObj.period ? parseInt(dataObj.period, 10) : 30,
-          digits: dataObj.digits ? parseInt(dataObj.digits, 10) : 6,
-          algorithm: dataObj.algorithm ?? "SHA1",
-          issuer: dataObj.issuer ?? undefined,
-        },
-      });
-    } catch (error) {
-      const err = error as Error;
-      console.error(err);
-    }
+    setRelayCameraState(true);
   };
 
   const { t } = useTranslation();
   return (
     <>
-      {!cameraOn ? (
+      {!AddCameraOn && !relayCameraOn && (
         <SafeAreaView className="bg-bg flex-1 items-center justify-center">
           <Text className="text-text text-2xl mt-5 justify-self-start text-center">
             {t("qrScanTitle")}
@@ -97,19 +48,56 @@ export default function TabTwoScreen() {
             className="mt-16"
             handlePress={() => handleScan()}
           ></Button>
+          <Button
+            title={t("scanRelayQrCode")}
+            className="mt-16"
+            handlePress={() => handleRelayScan()}
+          ></Button>
         </SafeAreaView>
-      ) : (
+      )}
+      {AddCameraOn && (
         <>
           <CameraView
             // className="flex-1"
             style={StyleSheet.absoluteFillObject}
             facing={facing}
-            onBarcodeScanned={(data) => !scanLocked && handleBarcodeData(data)}
+            onBarcodeScanned={(data) =>
+              !scanLocked &&
+              handleAddServiceBarcodeData(
+                data,
+                setScanLock,
+                setAddCameraState,
+                dispatch
+              )
+            }
           />
           <Button
             className="absolute bottom-0 left-0 right-0"
             title={t("cancelScaning")}
-            handlePress={() => setCameraState(false)}
+            handlePress={() => setAddCameraState(false)}
+          />
+        </>
+      )}
+      {relayCameraOn && (
+        <>
+          <CameraView
+            // className="flex-1"
+            style={StyleSheet.absoluteFillObject}
+            facing={facing}
+            onBarcodeScanned={(data) =>
+              !scanLocked &&
+              handleRelayServiceBarcodeData(
+                data,
+                setScanLock,
+                setRelayCameraState,
+                dispatch
+              )
+            }
+          />
+          <Button
+            className="absolute bottom-0 left-0 right-0"
+            title={t("cancelScaning")}
+            handlePress={() => setRelayCameraState(false)}
           />
         </>
       )}

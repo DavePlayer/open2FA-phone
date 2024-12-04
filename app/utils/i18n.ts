@@ -30,6 +30,7 @@ const resources = {
       settings: "Settings",
       qrScanTitle: "Scan the QR code on the website where you are enabling 2FA",
       scanQrCode: "Scan QR Code",
+      scanRelayQrCode: "Scan Relay QR Code",
       cancelScaning: "Cancel Scaning",
       ConfirmScanTitle: "Confirm Scaned Data",
       issuer: "Issuer",
@@ -65,6 +66,7 @@ const resources = {
       qrScanTitle:
         "Zeskanuj kod QR na stronie internetowej, na której włączasz 2FA.",
       scanQrCode: "Skanuj kod QR",
+      scanRelayQrCode: "Skanuj kod QR do przekaźnika",
       cancelScaning: "Anuluj Skanowanie",
       ConfirmScanTitle: "Potwierdź zeskanowane dane",
       issuer: "Wystawca",
