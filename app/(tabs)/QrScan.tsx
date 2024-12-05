@@ -3,10 +3,11 @@ import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import { useState } from "react";
 import Button from "../components/MainButton";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useAppDispatch } from "../redux/store";
+import { RootState, useAppDispatch } from "../redux/store";
 import { useTranslation } from "react-i18next";
 import { handleAddServiceBarcodeData } from "./helperFunctions/handleAddServiceBarcodeData";
 import { handleRelayServiceBarcodeData } from "./helperFunctions/handleRelayServiceBarcodeData";
+import { useSelector } from "react-redux";
 
 export default function TabTwoScreen() {
   const [facing, setFacing] = useState<CameraType>("back");
@@ -14,6 +15,7 @@ export default function TabTwoScreen() {
   const [relayCameraOn, setRelayCameraState] = useState(false);
   const [permission, requestPermission] = useCameraPermissions();
   const [scanLocked, setScanLock] = useState(false);
+  const platforms = useSelector((root: RootState) => root.platforms);
 
   const dispatch = useAppDispatch();
 
@@ -40,19 +42,26 @@ export default function TabTwoScreen() {
     <>
       {!AddCameraOn && !relayCameraOn && (
         <SafeAreaView className="bg-bg flex-1 items-center justify-center">
-          <Text className="text-text text-2xl mt-5 justify-self-start text-center">
-            {t("qrScanTitle")}
-          </Text>
-          <Button
-            title={t("scanQrCode")}
-            className="mt-16"
-            handlePress={() => handleScan()}
-          ></Button>
-          <Button
-            title={t("scanRelayQrCode")}
-            className="mt-16"
-            handlePress={() => handleRelayScan()}
-          ></Button>
+          <View className="h-[50v] flex-1 justify-center items-center border-b-2 border-white">
+            <Text className="text-text text-2xl mt-5 justify-self-start text-center">
+              {t("qrScanTitle")}
+            </Text>
+            <Button
+              title={t("scanQrCode")}
+              className="mt-16"
+              handlePress={() => handleScan()}
+            ></Button>
+          </View>
+          <View className="h-[50v] flex-1 justify-center items-center">
+            <Text className="text-text text-2xl mt-5 justify-self-start text-center">
+              {t("qrScanRelayTitle")}
+            </Text>
+            <Button
+              title={t("scanRelayQrCode")}
+              className="mt-16"
+              handlePress={() => handleRelayScan()}
+            ></Button>
+          </View>
         </SafeAreaView>
       )}
       {AddCameraOn && (
@@ -88,9 +97,9 @@ export default function TabTwoScreen() {
               !scanLocked &&
               handleRelayServiceBarcodeData(
                 data,
-                setScanLock,
+                platforms,
                 setRelayCameraState,
-                dispatch
+                setScanLock
               )
             }
           />

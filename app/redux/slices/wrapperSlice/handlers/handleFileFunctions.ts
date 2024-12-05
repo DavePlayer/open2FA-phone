@@ -2,6 +2,7 @@ import { FileObject } from "@/app/types/fileObject";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const fileLoadPending = () => {
+  console.log("fileLoadPending dispatched");
   return true;
 };
 

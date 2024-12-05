@@ -22,12 +22,13 @@ export default function CreateFilePrompt() {
   const handleCraeteFile = async () => {
     if (password.length > 0) {
       try {
-        // Async is sometimes a joke. In which case it is necessary for wrapper to be displayed
-        await new Promise((resolve) => setTimeout(resolve, 50));
+        // Wrapper state is being set before encryption, but wrapper is not rendered.
+        // small delay is needed so wrapper will show when creating a file.
+        // that is how convieniently react rendering works.
+        dispatch(showWrapper());
+        await new Promise((resolve) => setTimeout(resolve, 100));
 
-        // Use `unwrap` to get the actual result or catch an error
-        await dispatch(createFile({ password, iterations }));
-        // If successful, then navigate
+        await dispatch(createFile({ password, iterations })).unwrap();
         router.navigate("/");
       } catch (err) {
         await dispatch(hideWrapper());

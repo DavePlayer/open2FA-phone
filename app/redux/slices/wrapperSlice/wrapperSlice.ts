@@ -33,7 +33,7 @@ const wrapperSlice = createSlice({
     builder.addCase(saveToFile.fulfilled, fileLoadFullfilled);
     builder.addCase(saveToFile.rejected, fileLoadRejected);
     // ---------------------
-    // Save File
+    // Create File
     // ---------------------
     builder.addCase(createFile.pending, fileLoadPending);
     builder.addCase(createFile.fulfilled, fileLoadFullfilled);

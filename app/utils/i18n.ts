@@ -29,6 +29,8 @@ const resources = {
       qrScan: "Qr Scan",
       settings: "Settings",
       qrScanTitle: "Scan the QR code on the website where you are enabling 2FA",
+      qrScanRelayTitle:
+        "Scan the QR code to send code through Relay Server directly to App",
       scanQrCode: "Scan QR Code",
       scanRelayQrCode: "Scan Relay QR Code",
       cancelScaning: "Cancel Scaning",
@@ -57,6 +59,8 @@ const resources = {
       createFileWarning:
         "Po kliknięciu przycisku Utwórz plik należy odczekać kilka sekund. Następnie pojawi się okno udostępniania, w którym można zapisać plik na dysku lub w chmurze.",
       loadFileTitle: "Podaj hasło do odszyfrowania pliku",
+      qrScanRelayTitle:
+        "Zeskanuj kod Qr aby przesłać kod poprzez serwer przekaźnikowy vezpośrednio do aplikacji",
       wrapperMessage1: "Funkcje plików działają w tle",
       wrapperMessage2: "To może chwilę zająć",
       noPlatformsMessage: "Brak zapisanych usług",
