@@ -39,7 +39,7 @@ const index = () => {
 
     try {
       const document = await DocumentPicker.getDocumentAsync({
-        copyToCacheDirectory: false,
+        copyToCacheDirectory: true,
         multiple: false,
       });
       if (document.assets && document.assets.length && !document.canceled) {
@@ -48,22 +48,12 @@ const index = () => {
 
         // uri is broken when special characters are included
         // no idea why that is
-        const fileName = uri.split(/,|%2F|%3A/).pop() as string;
-        console.log(`uri: ${uri}\nsplit:${uri.split(/,|%2F|%3A/)}`);
-        const newFileUri = FileSystem.documentDirectory + fileName;
-
-        const fileInfo = await FileSystem.getInfoAsync(newFileUri);
-        if (fileInfo.exists) {
-          await FileSystem.deleteAsync(newFileUri); // Delete the file if it exists
-        }
-
-        await FileSystem.copyAsync({
-          from: uri,
-          to: newFileUri,
-        });
+        const fileName = asset.name;
+        console.log("Filename: ", fileName);
+        console.log("filePath: ", asset.uri);
 
         router.navigate(
-          `/LoadFilePrompt?uri=${newFileUri}&fileName=${fileName}`
+          `/LoadFilePrompt?uri=${asset.uri}&fileName=${fileName}`
         );
       } else {
         console.log(document.assets, document.canceled);

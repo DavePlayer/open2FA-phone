@@ -5,11 +5,16 @@ import { RootState, useAppDispatch } from "../redux/store";
 import { setLanguage } from "../redux/slices/settingsSlice/settingsSlice";
 import { Picker } from "@react-native-picker/picker";
 import { useTranslation } from "react-i18next";
+import Button from "../components/MainButton";
+import { logout } from "./helperFunctions/handleLogout";
+import { useRouter } from "expo-router";
 
 const Settings = () => {
   const settings = useSelector((root: RootState) => root.settings);
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     i18n.changeLanguage(settings.language);
   }, [settings.language]);
@@ -45,6 +50,12 @@ const Settings = () => {
             <Picker.Item label="English" value="en" />
           </Picker>
         </View>
+        <Button
+          className="w-1/2 mx-auto mt-10"
+          handlePress={() => logout({ dispatch, router })}
+        >
+          {t("exitFile")}
+        </Button>
       </View>
     </SafeAreaView>
   );

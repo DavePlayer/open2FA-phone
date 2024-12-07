@@ -1,11 +1,9 @@
 import { View, Text, TextInput } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import Slider from "@react-native-community/slider";
 import Button from "./components/MainButton";
 import Toast from "react-native-root-toast";
 import { useAppDispatch } from "./redux/store";
-import { createFile } from "./redux/globalThunks/createFile";
 import { loadFile } from "./redux/globalThunks/loadFile";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import {
@@ -13,6 +11,7 @@ import {
   showWrapper,
 } from "./redux/slices/wrapperSlice/wrapperSlice";
 import { useTranslation } from "react-i18next";
+import { Keyboard } from "react-native";
 
 export default function LoadFilePrompt() {
   const [password, setPassword] = useState("");
@@ -23,19 +22,28 @@ export default function LoadFilePrompt() {
     fileName: string;
   }>();
 
+  const { t } = useTranslation();
+
   const handleLoadFile = async () => {
+    Keyboard.dismiss();
     console.log("handling file decryption with: ", uri, password);
     if (password.length > 0) {
       try {
         await dispatch(loadFile({ uri, password, fileName })).unwrap();
 
         // Navigation should only occur if decryption is successful
-        router.navigate("/(tabs)");
+        router.navigate("/(tabs)/HomeScreen");
       } catch (error) {
         const err = error as Error;
+
         // Display an error message if decryption fails
-        Toast.show("invalid password");
-        console.error("Error in file loading:", err.message);
+        // Toast.show("invalid password", {
+        //   duration: Toast.durations.LONG,
+        //   animation: true,
+        // });
+        console.error(
+          err.name == "invalid password" ? t("invalidPassword") : err.message
+        );
       } finally {
         await dispatch(hideWrapper());
       }
@@ -44,7 +52,6 @@ export default function LoadFilePrompt() {
     }
   };
 
-  const { t } = useTranslation();
   return (
     <SafeAreaView className="bg-bg flex-1 justify-center items-center p-5">
       <Text className="text-text mb-5 text-3xl text-center">

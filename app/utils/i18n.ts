@@ -44,6 +44,8 @@ const resources = {
       cancel: "Cancel",
       setLanguage: "Set language",
       language: "Language",
+      exitFile: "Exit File",
+      invalidPassword: "Invalid password",
     },
   },
   pl: {
@@ -82,6 +84,8 @@ const resources = {
       cancel: "Anuluj",
       setLanguage: "Ustaw język",
       language: "Język",
+      exitFile: "Wyjdź z pliku",
+      invalidPassword: "Niepoprawne hasło",
     },
   },
 };

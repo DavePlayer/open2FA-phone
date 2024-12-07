@@ -64,7 +64,10 @@ const Fabox = ({
             ? label.substring(0, labelMaxLenth) + "..."
             : label}
         </Text>
-        <Text className="text-text text-5xl">{token}</Text>
+        <Text className="text-text text-5xl">
+          {token.replace(/.{3}/g, "$& ")}
+          {/* Add to token space every 3 characters */}
+        </Text>
       </View>
       <Timer time={timeLeft} />
     </View>

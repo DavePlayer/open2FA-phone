@@ -30,6 +30,12 @@ const settingsSlice = createSlice({
         language: action.payload,
       };
     },
+    clearSettings: (state) => {
+      return {
+        ...state,
+        fileName: "",
+      };
+    },
   },
   extraReducers: (builder) => {
     // ---------------------
@@ -43,5 +49,5 @@ const settingsSlice = createSlice({
   },
 });
 
-export const { setLanguage } = settingsSlice.actions;
+export const { setLanguage, clearSettings } = settingsSlice.actions;
 export default settingsSlice.reducer;

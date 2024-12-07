@@ -4,7 +4,10 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import { PlatformServiceSchema } from "@/app/types/services";
 import Button from "@/app/components/MainButton";
 import { RootState, useAppDispatch } from "@/app/redux/store";
-import { addService } from "@/app/redux/slices/platformsSlice/platformsSlice";
+import {
+  addService,
+  clearServiceToConfirm,
+} from "@/app/redux/slices/platformsSlice/platformsSlice";
 import { useSelector } from "react-redux";
 import Toast from "react-native-root-toast";
 import { saveToFile } from "@/app/redux/globalThunks/saveToFile";
@@ -38,7 +41,9 @@ const CorrectQrScan = () => {
 
       await dispatch(saveToFile());
 
-      router.navigate("/(tabs)");
+      dispatch(clearServiceToConfirm());
+
+      router.navigate("/(tabs)/HomeScreen");
     } catch (error) {
       const err = error as Error;
       console.error(err);

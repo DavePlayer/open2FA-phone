@@ -23,6 +23,6 @@ export const fileLoadFullfilled = (
 };
 
 export const fileLoadRejected = (state: PlatformsSliceState, action: any) => {
-  console.error(action.error.message);
+  // console.error(action.error.message);
   return state;
 };

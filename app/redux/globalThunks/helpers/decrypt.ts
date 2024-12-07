@@ -59,9 +59,11 @@ export async function decrypt(
     }
 
     if (expectedHmac.toString(CryptoES.enc.Base64) !== hmacStr) {
-      throw new Error(
+      let err = new Error(
         "Decryption failed: HMAC verification failed. Invalid password."
       );
+      err.name = "invalid password";
+      throw err;
     }
 
     const decryptedObj = CryptoES.AES.decrypt(encryptedText, key, {
@@ -84,7 +86,7 @@ export async function decrypt(
       throw new Error("Decryption failed: Invalid password");
     }
   } catch (error) {
-    console.error("Error during decryption:", error);
+    // console.error("Error during decryption:", error);
     throw error;
   }
 }

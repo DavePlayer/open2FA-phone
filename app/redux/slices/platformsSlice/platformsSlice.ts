@@ -25,7 +25,14 @@ const platformsSlice = createSlice({
   reducers: {
     addService: (state, action: PayloadAction<PlatformService>) => {
       return {
+        ...state,
         platformServices: [...state.platformServices, action.payload],
+      };
+    },
+    clearServiceToConfirm: (state) => {
+      return {
+        ...state,
+        serviceToConfirm: undefined,
       };
     },
     addServiceToConfirm: (state, action: PayloadAction<PlatformService>) => {
@@ -33,6 +40,9 @@ const platformsSlice = createSlice({
         ...state,
         serviceToConfirm: action.payload,
       };
+    },
+    clearPlatforms: () => {
+      return initialState;
     },
   },
   extraReducers: (builder) => {
@@ -47,5 +57,10 @@ const platformsSlice = createSlice({
   },
 });
 
-export const { addService, addServiceToConfirm } = platformsSlice.actions;
+export const {
+  addService,
+  addServiceToConfirm,
+  clearPlatforms,
+  clearServiceToConfirm,
+} = platformsSlice.actions;
 export default platformsSlice.reducer;
