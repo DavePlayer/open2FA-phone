@@ -60,6 +60,7 @@ export default function LoadFilePrompt() {
       <View className="mt-5 flex w-full">
         <TextInput
           className="w-full text-center mb-5 border-secondary border rounded-xl text-lg p-2 text-text placeholder:text-[#aaa]"
+          secureTextEntry={true}
           placeholder={t("password")}
           value={password}
           onChangeText={(val) => setPassword(val)}

@@ -18,6 +18,7 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import LoadingWrapper from "./components/LoadingWrapper";
 import "./utils/i18n";
+import EditServiceModal from "./components/EditServiceModal";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -44,7 +45,9 @@ export default function RootLayout() {
           value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
         >
           <LoadingWrapper>
-            <Slot />
+            <EditServiceModal>
+              <Slot />
+            </EditServiceModal>
           </LoadingWrapper>
         </ThemeProvider>
       </RootSiblingParent>

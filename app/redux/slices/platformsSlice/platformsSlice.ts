@@ -29,6 +29,14 @@ const platformsSlice = createSlice({
         platformServices: [...state.platformServices, action.payload],
       };
     },
+    deleteService: (state, action: PayloadAction<PlatformService>) => {
+      return {
+        ...state,
+        platformServices: state.platformServices.filter(
+          (platform) => platform.label != action.payload.label
+        ),
+      };
+    },
     clearServiceToConfirm: (state) => {
       return {
         ...state,
@@ -62,5 +70,6 @@ export const {
   addServiceToConfirm,
   clearPlatforms,
   clearServiceToConfirm,
+  deleteService,
 } = platformsSlice.actions;
 export default platformsSlice.reducer;

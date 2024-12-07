@@ -60,6 +60,12 @@ export default function TabLayout() {
             href: null,
           }}
         />
+        <Tabs.Screen
+          name="SubPage/Modal"
+          options={{
+            href: null,
+          }}
+        />
       </Tabs>
     </>
   );

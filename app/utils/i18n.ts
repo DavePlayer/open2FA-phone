@@ -46,6 +46,9 @@ const resources = {
       language: "Language",
       exitFile: "Exit File",
       invalidPassword: "Invalid password",
+      deleteQuestion: "Are you sure you want to delete service bellow?",
+      yes: "Yes",
+      no: "No",
     },
   },
   pl: {
@@ -86,6 +89,9 @@ const resources = {
       language: "Język",
       exitFile: "Wyjdź z pliku",
       invalidPassword: "Niepoprawne hasło",
+      deleteQuestion: "Jesteś pewny, że chcesz usunąć poniższą usługę?",
+      yes: "Tak",
+      no: "Nie",
     },
   },
 };

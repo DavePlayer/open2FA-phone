@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import platformSlice from "./slices/platformsSlice/platformsSlice";
 import wrapperSlice from "./slices/wrapperSlice/wrapperSlice";
 import settingsSlice from "./slices/settingsSlice/settingsSlice";
+import modalSlice from "./slices/modalSlice/modalSlice";
 
 export const store = configureStore({
   //   reducer: { trees: treesSlice, editedTree: editedTreeSlice, user: userSlice },
@@ -10,6 +11,7 @@ export const store = configureStore({
     platforms: platformSlice,
     wrapperState: wrapperSlice,
     settings: settingsSlice,
+    modalState: modalSlice,
   },
   // middleware used to display state static/async state changes
   //   middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),

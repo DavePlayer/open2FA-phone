@@ -9,7 +9,7 @@ import { saveToFile } from "../../globalThunks/saveToFile";
 import { createFile } from "../../globalThunks/createFile";
 
 const wrapperSlice = createSlice({
-  name: "platforms",
+  name: "wrapper",
   initialState: false,
   reducers: {
     showWrapper: (state) => {
