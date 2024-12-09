@@ -93,15 +93,15 @@ export default function TabTwoScreen() {
             // className="flex-1"
             style={StyleSheet.absoluteFillObject}
             facing={facing}
-            onBarcodeScanned={(data) =>
+            onBarcodeScanned={(data) => {
               !scanLocked &&
-              handleRelayServiceBarcodeData(
-                data,
-                platforms,
-                setRelayCameraState,
-                setScanLock
-              )
-            }
+                handleRelayServiceBarcodeData(
+                  data,
+                  platforms,
+                  setRelayCameraState,
+                  setScanLock
+                );
+            }}
           />
           <Button
             className="absolute bottom-0 left-0 right-0"

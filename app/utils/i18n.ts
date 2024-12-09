@@ -49,6 +49,42 @@ const resources = {
       deleteQuestion: "Are you sure you want to delete service bellow?",
       yes: "Yes",
       no: "No",
+
+      confirmQrScanError: "Error when trying to Confirm scanned QR Code",
+      confirmQrScanErrorDetail1:
+        "No temporary object to add to your platforms list",
+
+      createFileError: "Error during file creation",
+
+      passwordError: "Password error",
+      passwordErrorDetail1: "Invalid Password",
+
+      fieldError: "Field error",
+      fieldErrorDetail1: "Password can't be empty",
+
+      fileLoadingError: "Error during file loading",
+      fileLoadingCanceled: "Filepicker canceled without file",
+      fileLoadingErrorDetail1: "",
+
+      fileCreationError: "Error during file creation",
+
+      noServiceError: "No service found",
+      noServiceErrorDetail1: "No service with this label",
+
+      relayQrReadError: "Relay server handling error",
+
+      fileError: "File Error",
+      fileDecryptError1: "Invalid File structure",
+
+      fileDecryptionInvalidPassword: "Invalid password",
+      fileDecryptionHmacError:
+        "Decryption failed: HMAC verification failed. Invalid password",
+
+      bgEncryptionInfo: "Encryption in background",
+      bgEncryptionInfoDetail1: "Encrypting token in the background",
+
+      serviceAddonError: "Service addon error",
+      serviceAddonSecretError: "Service with provided secret already exists",
     },
   },
   pl: {
@@ -92,6 +128,41 @@ const resources = {
       deleteQuestion: "Jesteś pewny, że chcesz usunąć poniższą usługę?",
       yes: "Tak",
       no: "Nie",
+
+      confirmQrScanError: "Błąd podczas potwierdzania odczytu kodu QR",
+      confirmQrScanErrorDetail1:
+        "Brak tymczasowego obiektu do oddania do listy",
+
+      createFileError: "Błąd podczas odczytu pliku",
+
+      passwordError: "Błąd hasła",
+      passwordErrorDetail1: "NIepoprawne hasło",
+
+      fieldError: "Błąd pola",
+      fieldErrorDetail1: "Hasło nie może być puste",
+
+      fileLoadingError: "Błąd podczas ładowania pliku",
+      fileLoadingCanceled: "Anulowano wybieranie pliku",
+      fileLoadingErrorDetail1: "",
+
+      fileCreationError: "Błąd podczas tworzenia pliku",
+
+      noServiceError: "Nie znaleziono usługi",
+      noServiceErrorDetail1: "Brak usługi z wartością label: ",
+
+      relayQrReadError: "Błąd obsługi serwera przekaźnika",
+
+      fileError: "Błąd pliku",
+      fileDecryptError1: "Niepoprawna struktura pliku",
+
+      fileDecryptionInvalidPassword: "Niepoprawne hasło",
+      fileDecryptionHmacError:
+        "Kod Autoryzacji oparty na funkcji skrótu niepoprawny",
+      bgEncryptionInfo: "Szyfrowanie działa w tle",
+      bgEncryptionInfoDetail1: "Szyforwanie tokenu do przesłąnia działa w tle",
+
+      serviceAddonError: "Błąd dodawania usługi",
+      serviceAddonSecretError: "Usługa z takim sekretem już istnieje",
     },
   },
 };

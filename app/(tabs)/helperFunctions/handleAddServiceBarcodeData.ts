@@ -4,7 +4,7 @@ import { PlatformServiceSchema } from "@/app/types/services";
 import { BarcodeScanningResult } from "expo-camera";
 import { router } from "expo-router";
 import { Dispatch, SetStateAction } from "react";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 
 export const handleAddServiceBarcodeData = async (
   scanData: BarcodeScanningResult,
@@ -13,6 +13,7 @@ export const handleAddServiceBarcodeData = async (
   dispatch: AppDispatch
 ) => {
   let { data } = scanData;
+  console.log(data);
   data = decodeURIComponent(data); // handle special characters like @ in label which may contain email
 
   setScanLock(true);
@@ -62,7 +63,10 @@ export const handleAddServiceBarcodeData = async (
     });
   } catch (error) {
     const err = error as Error;
-    Toast.show("Invalid QR");
+    Toast.show({
+      type: "error",
+      text1: "Invalid QR Code",
+    });
     // console.error(err);
   }
 };

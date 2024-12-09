@@ -11,7 +11,7 @@ import Button from "@/app/components/MainButton";
 import * as FileSystem from "expo-file-system";
 import * as DocumentPicker from "expo-document-picker";
 import * as MediaLibrary from "expo-media-library";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import { useTranslation } from "react-i18next";
 import * as SecureStore from "expo-secure-store";
 import { useSelector } from "react-redux";
@@ -25,6 +25,7 @@ const index = () => {
   const settings = useSelector((root: RootState) => root.settings);
   const dispatch = useAppDispatch();
   const pickerRef = useRef<any>();
+  const { t, i18n } = useTranslation();
 
   function open() {
     pickerRef.current.focus();
@@ -57,13 +58,15 @@ const index = () => {
         );
       } else {
         console.log(document.assets, document.canceled);
-        throw new Error("file either canceled or sth is wrong");
+        throw new Error(i18n.t("fileLoadingCanceled"));
       }
     } catch (error: unknown) {
       const err = error as Error;
       console.error(err);
-      Toast.show(err.message, {
-        duration: Toast.durations.SHORT,
+      Toast.show({
+        type: "error",
+        text1: t("fileLoadingError"),
+        text2: err.message,
       });
     }
   };
@@ -80,13 +83,14 @@ const index = () => {
     } catch (error: unknown) {
       const err = error as Error;
       console.error(err);
-      Toast.show(err.message, {
-        duration: Toast.durations.SHORT,
+      Toast.show({
+        type: "error",
+        text1: t("fileCreationError"),
+        text2: err.message,
       });
     }
   };
 
-  const { t, i18n } = useTranslation();
   useEffect(() => {
     const handleLanguage = async () => {
       const language = SecureStore.getItem("language");
@@ -130,6 +134,7 @@ const index = () => {
               overflow: "hidden", // Ensures the borderRadius is applied correctly
             }}
           >
+            <Text className="text-3xl">Select Language</Text>
             <Picker
               ref={pickerRef}
               dropdownIconColor="white"
@@ -140,11 +145,6 @@ const index = () => {
               selectedValue={settings.language}
               onValueChange={(itemValue, _) => dispatch(setLanguage(itemValue))}
             >
-              <Picker.Item
-                enabled={false}
-                label="Select Language"
-                value={undefined}
-              />
               <Picker.Item label="Polski" value="pl" />
               <Picker.Item label="English" value="eng" />
             </Picker>

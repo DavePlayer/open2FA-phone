@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Slider from "@react-native-community/slider";
 import Button from "./components/MainButton";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import { useAppDispatch } from "./redux/store";
 import { createFile } from "./redux/globalThunks/createFile";
 import { useRouter } from "expo-router";
@@ -18,6 +18,7 @@ export default function CreateFilePrompt() {
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const handleCraeteFile = async () => {
     if (password.length > 0) {
@@ -32,17 +33,24 @@ export default function CreateFilePrompt() {
         router.navigate("/");
       } catch (err) {
         await dispatch(hideWrapper());
-        Toast.show("Something went wrong durin creation of the file");
-        console.error("Error in file creating:", err);
+        Toast.show({
+          type: "error",
+          text1: t("createFileError"),
+          text2: `${JSON.stringify(err)}`,
+        });
+        console.error("Error when creating a file:", err);
       } finally {
         await dispatch(hideWrapper());
       }
     } else {
-      Toast.show("Password can't be empty", {});
+      Toast.show({
+        type: "error",
+        text1: t("fieldError"),
+        text2: t("fieldErrorDetail1"),
+      });
     }
   };
 
-  const { t } = useTranslation();
   return (
     <SafeAreaView className="bg-bg flex-1 justify-center items-center p-5">
       <Text className="text-text mb-5">{t("createFileInstruction")}</Text>

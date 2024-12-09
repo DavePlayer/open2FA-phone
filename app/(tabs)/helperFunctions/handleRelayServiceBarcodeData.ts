@@ -4,10 +4,12 @@ import {
 } from "@/app/redux/slices/platformsSlice/platformsSlice";
 import { QrRelaySchema } from "@/app/types/QrRelay";
 import { BarcodeScanningResult } from "expo-camera";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import forge from "node-forge";
 import { Dispatch, SetStateAction } from "react";
 import * as OTPAuth from "otpauth";
+import { error } from "console";
+import i18n from "../../utils/i18n";
 
 const encryptData = (data: string, publicKeyPem: string): string => {
   const key = forge.pki.publicKeyFromPem(publicKeyPem);
@@ -27,14 +29,21 @@ export const handleRelayServiceBarcodeData = async (
 ) => {
   setScanLocked(true);
   setTimeout(() => setScanLocked(false), 2000);
-  let { raw } = scanData;
+  let { data } = scanData;
 
-  if (raw) {
-    const parsedObj = JSON.parse(raw);
+  if (data) {
+    const parsedObj = JSON.parse(data);
     console.log("parsed object: ", parsedObj);
+    setCameraState(false);
     try {
       const QrRelayData = QrRelaySchema.parse(parsedObj);
       const publicKeyPem = QrRelayData.publicKey; // Direct PEM key from the QR data
+
+      Toast.show({
+        type: "info",
+        text1: i18n.t("bgEncryptionInfo"),
+        text2: i18n.t("bgEncryptionInfoDetail1"),
+      });
 
       const matchedPlatform = platforms.platformServices.find(
         (platform) =>
@@ -43,7 +52,12 @@ export const handleRelayServiceBarcodeData = async (
       );
 
       if (!matchedPlatform) {
-        Toast.show("Service not found");
+        Toast.show({
+          type: "error",
+          text1: i18n.t("noServiceError"),
+          text2: `${i18n.t("noServiceErrorDetail1")}: ${QrRelayData.label}`,
+          visibilityTime: 6000,
+        });
         return setCameraState(false);
       }
       const totp = new OTPAuth.TOTP({
@@ -77,20 +91,27 @@ export const handleRelayServiceBarcodeData = async (
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Accept: "*/*",
         },
         body: JSON.stringify({
           code: encryptedData,
           roomId: QrRelayData.websocketId,
         }),
       });
+      if (status.status === 429) {
+        throw "Limit excided";
+      }
       if (!status.ok) {
-        throw status.statusText;
+        throw status;
       }
       console.log("Fetch status: ", status.status);
-      setCameraState(false);
-    } catch (err) {
-      console.error(err);
+    } catch (err: any) {
+      Toast.show({
+        type: "error",
+        text1: i18n.t("relayQrReadError"),
+        text2: err,
+        visibilityTime: 6000,
+      });
+      if (!err.includes("Aborted")) console.error(err);
     }
   }
 };

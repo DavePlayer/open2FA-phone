@@ -33,7 +33,7 @@ const platformsSlice = createSlice({
       return {
         ...state,
         platformServices: state.platformServices.filter(
-          (platform) => platform.label != action.payload.label
+          (platform) => platform.secret != action.payload.secret
         ),
       };
     },

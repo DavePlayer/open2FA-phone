@@ -2,7 +2,7 @@ import { View, Text, TextInput } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Button from "./components/MainButton";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import { useAppDispatch } from "./redux/store";
 import { loadFile } from "./redux/globalThunks/loadFile";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -12,6 +12,7 @@ import {
 } from "./redux/slices/wrapperSlice/wrapperSlice";
 import { useTranslation } from "react-i18next";
 import { Keyboard } from "react-native";
+import { error } from "console";
 
 export default function LoadFilePrompt() {
   const [password, setPassword] = useState("");
@@ -37,18 +38,20 @@ export default function LoadFilePrompt() {
         const err = error as Error;
 
         // Display an error message if decryption fails
-        // Toast.show("invalid password", {
-        //   duration: Toast.durations.LONG,
-        //   animation: true,
-        // });
-        console.error(
-          err.name == "invalid password" ? t("invalidPassword") : err.message
-        );
+        Toast.show({
+          type: "error",
+          text1: err.name,
+          text2: err.message,
+        });
       } finally {
         await dispatch(hideWrapper());
       }
     } else {
-      Toast.show("Password can't be empty", {});
+      Toast.show({
+        type: "error",
+        text1: t("fieldError"),
+        text2: t("fieldErrorDetail1"),
+      });
     }
   };
 

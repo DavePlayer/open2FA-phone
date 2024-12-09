@@ -41,11 +41,6 @@ const Settings = () => {
             selectedValue={settings.language}
             onValueChange={(itemValue, _) => dispatch(setLanguage(itemValue))}
           >
-            <Picker.Item
-              enabled={false}
-              label="Select Language"
-              value={undefined}
-            />
             <Picker.Item label="Polski" value="pl" />
             <Picker.Item label="English" value="en" />
           </Picker>

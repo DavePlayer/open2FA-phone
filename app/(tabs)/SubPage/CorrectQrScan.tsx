@@ -9,9 +9,10 @@ import {
   clearServiceToConfirm,
 } from "@/app/redux/slices/platformsSlice/platformsSlice";
 import { useSelector } from "react-redux";
-import Toast from "react-native-root-toast";
+import Toast from "react-native-toast-message";
 import { saveToFile } from "@/app/redux/globalThunks/saveToFile";
 import { useTranslation } from "react-i18next";
+import i18n from "@/app/utils/i18n";
 
 type StringifiedState = {
   issuer: string;
@@ -27,15 +28,31 @@ const CorrectQrScan = () => {
   const router = useRouter();
 
   const dispatch = useAppDispatch();
-  const { serviceToConfirm } = useSelector((root: RootState) => root.platforms);
+  const { serviceToConfirm, platformServices } = useSelector(
+    (root: RootState) => root.platforms
+  );
+
+  const { t } = useTranslation();
 
   const confirm = async () => {
     if (!serviceToConfirm) {
-      Toast.show("No temporary object to add to your platforms list");
+      Toast.show({
+        type: "error",
+        text1: t("confirmQrScanError"),
+        text2: t("confirmQrScanErrorDetail1"),
+      });
       return;
     }
     try {
-      console.log(serviceToConfirm);
+      const existingServiceIndex = platformServices.findIndex(
+        (platform) => platform.secret === serviceToConfirm.secret
+      );
+      if (existingServiceIndex !== -1)
+        return Toast.show({
+          type: "error",
+          text1: i18n.t("serviceAddonError"),
+          text2: i18n.t("serviceAddonSecretError"),
+        });
 
       dispatch(addService(serviceToConfirm));
 
@@ -54,7 +71,6 @@ const CorrectQrScan = () => {
     router.navigate("/(tabs)/QrScan");
   };
 
-  const { t } = useTranslation();
   return (
     <View className="p-5 flex-1 flex-col">
       <Text className="text-text text-center text-3xl my-10">

@@ -4,8 +4,6 @@ import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import Timer from "./timer";
 import { PlatformService } from "@/app/types/services";
 import * as OTPAuth from "otpauth";
-import Toast from "react-native-root-toast";
-import { router } from "expo-router";
 import { useAppDispatch } from "@/app/redux/store";
 import { showModal } from "@/app/redux/slices/modalSlice/modalSlice";
 import * as Haptics from "expo-haptics";

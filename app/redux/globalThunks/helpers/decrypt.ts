@@ -1,3 +1,4 @@
+import i18n from "@/app/utils/i18n";
 import CryptoES from "crypto-es";
 import * as SecureStore from "expo-secure-store";
 
@@ -55,14 +56,14 @@ export async function decrypt(
     );
 
     if (!iterations) {
-      throw new Error("File is not ok");
+      let err = new Error(i18n.t("fileDecryptError1"));
+      err.name = i18n.t("fileError");
+      throw err;
     }
 
     if (expectedHmac.toString(CryptoES.enc.Base64) !== hmacStr) {
-      let err = new Error(
-        "Decryption failed: HMAC verification failed. Invalid password."
-      );
-      err.name = "invalid password";
+      let err = new Error(i18n.t("fileDecryptionHmacError"));
+      err.name = i18n.t("fileDecryptionInvalidPassword");
       throw err;
     }
 
@@ -71,20 +72,13 @@ export async function decrypt(
       padding: CryptoES.pad.Pkcs7,
     });
 
-    // Check if the decrypted object has valid data
-    if (decryptedObj.sigBytes > 0) {
-      const decryptedText = decryptedObj.toString(CryptoES.enc.Utf8);
-      console.log("Decrypted message:", decryptedText); // Check if the decrypted message is valid
+    const decryptedText = decryptedObj.toString(CryptoES.enc.Utf8);
+    console.log("Decrypted message:", decryptedText); // Check if the decrypted message is valid
 
-      // if data is loaded and is correct, save password and iterations in secure storage, so user
-      // won't have to write it on each change
-      await SecureStore.setItem("password", password);
-      await SecureStore.setItem("iterations", iterations.toString());
+    await SecureStore.setItem("password", password);
+    await SecureStore.setItem("iterations", iterations.toString());
 
-      return decryptedText;
-    } else {
-      throw new Error("Decryption failed: Invalid password");
-    }
+    return decryptedText;
   } catch (error) {
     // console.error("Error during decryption:", error);
     throw error;
