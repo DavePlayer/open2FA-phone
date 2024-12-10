@@ -54,14 +54,15 @@ const Fabox = (state: PlatformService) => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         dispatch(showModal(state));
       }}
+      className="px-3"
     >
-      <View className="w-full p-5 flex flex-row items-center mt-5">
-        <TabBarIcon className="" name="logo-google" color="#fff" />
+      <View className="w-full p-5 flex flex-row items-center mt-5 bg-bg2 py-10">
+        {/* <TabBarIcon className="" name="logo-google" color="#fff" /> */}
         <View className="grow px-4 flex relative justify-center">
-          <Text className="text-text text-sm absolute mb-5 left-4 top-[-25]">
+          <Text className="text-text text-md absolute mb-5 left-4 top-[-25]">
             {issuer}
           </Text>
-          <Text className="text-text text-sm absolute mb-5 left-4 bottom-[-30]">
+          <Text className="text-text text-sm absolute mb-4 left-4 bottom-[-30]">
             {label.length > labelMaxLength
               ? label.substring(0, labelMaxLength) + "..."
               : label}

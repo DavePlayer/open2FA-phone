@@ -13,7 +13,7 @@ export default function HomeScreen() {
   const { t } = useTranslation();
   return (
     <SafeAreaView className="">
-      <ScrollView className="w-full">
+      <ScrollView className="w-full min-h-[100vh] bg-bg">
         {platforms.platformServices.length === 0 && (
           <Text className="text-text text-3xl mt-10 text-center">
             {t("noPlatformsMessage")}
